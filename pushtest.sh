@@ -1,10 +1,3 @@
-# Test basic connectivity
-curl -I https://github.com
-
-# Test Git operations with a different repo
-git clone https://github.com/octocat/Hello-World.git test-repo
-cd test-repo
-echo "test" > test.txt
-git add test.txt
-git commit -m "test"
+git add .
+git commit -m "Add debug logging to diagnose blank page"
 git push origin main

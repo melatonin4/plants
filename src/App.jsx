@@ -11,6 +11,8 @@ import { setLogLevel } from "firebase/firestore";
 // Import snippets data from separate file
 import { SNIPPET_DATA } from "./snippets-data.js";
 
+console.log("🔧 App component loading...");
+
 // --- ENVIRONMENT VARIABLE HELPER ----
 const safeGetEnv = (key, defaultValue) => {
   // For Vite - use VITE_ prefix
