@@ -305,6 +305,12 @@ const NoteSnippet = ({
 export default function App() {
   const { db, auth, userId } = useFirebase();
 
+  // ADD THIS DEBUG LOGGING
+  console.log("🔧 App rendering...");
+  console.log("Firebase db:", db);
+  console.log("User ID:", userId);
+  console.log("Snippets data:", SNIPPET_DATA);
+
   const [accessInput, setAccessInput] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
 
@@ -313,120 +319,109 @@ export default function App() {
     return imageFilenames.map((filename) => `/images/${snippetId}/${filename}`);
   };
 
-  // NoteSnippet component - handle dynamic image loading
-  const NoteSnippet = ({
-    id,
-    title,
-    images,
-    userId,
-    isEditable,
-    db,
-    defaultNote,
-  }) => {
-    // ... existing state and functions ...
+  // Generate snippets with your actual plant images
+  const snippets = useMemo(
+    () =>
+      SNIPPET_DATA.map((data) => ({
+        ...data,
+        images: getImagePaths(data.id, data.imageFilenames),
+      })),
+    []
+  );
 
-    // Generate snippets with your actual plant images
-    const snippets = useMemo(
-      () =>
-        SNIPPET_DATA.map((data) => ({
-          ...data,
-          images: getImagePaths(data.id, data.imageFilenames),
-        })),
-      []
-    );
-
-    const checkAccess = (input) => {
-      return input.toLowerCase() === ACCESS_NAME.toLowerCase();
-    };
-
-    const handleUnlock = () => {
-      if (checkAccess(accessInput)) {
-        setIsUnlocked(true);
-        setAccessInput("");
-      } else {
-        console.error("Incorrect access name. Please try again.");
-        setAccessInput("");
-      }
-    };
-
-    return (
-      <div className="min-h-screen bg-gray-50 p-4 sm:p-6 font-inter">
-        <header className="max-w-4xl mx-auto mb-6 text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900 border-b-2 border-blue-500 pb-2">
-            Plant Observation Tracker
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Track your plant growth and observations. Access Name: **
-            {ACCESS_NAME}
-            **
-          </p>
-          <p className="text-sm text-red-500 mt-1">
-            {db && isUnlocked ? (
-              <span>
-                Persistent connection, <strong>{ACCESS_NAME}</strong> — you can
-                save your notes now.
-              </span>
-            ) : (
-              <span>Persistence NOT Active (Missing Firebase Config).</span>
-            )}
-          </p>
-        </header>
-
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* --- GLOBAL UNLOCK BAR --- */}
-          {!isUnlocked && (
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
-              <label
-                htmlFor="access-name"
-                className="text-sm font-medium text-yellow-800 shrink-0"
-              >
-                Enter Access Name to Edit:
-              </label>
-              <input
-                id="access-name"
-                type="text"
-                className="w-full sm:w-64 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-                value={accessInput}
-                onChange={(e) => setAccessInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") handleUnlock();
-                }}
-                placeholder="Enter Name..."
-              />
-              <button
-                onClick={handleUnlock}
-                className="w-full sm:w-auto px-4 py-2 bg-yellow-600 text-white font-semibold rounded-md shadow-sm hover:bg-yellow-700 transition duration-150 text-sm"
-              >
-                Unlock Editing
-              </button>
-            </div>
-          )}
-
-          {/* --- RENDER PLANT SNIPPETS --- */}
-          {snippets.map((data, index) => (
-            <React.Fragment key={data.id}>
-              <NoteSnippet
-                id={data.id}
-                title={data.title}
-                images={data.images}
-                defaultNote={data.defaultNote}
-                userId={userId}
-                db={db}
-                isEditable={isUnlocked && !!db}
-              />
-              {index < snippets.length - 1 && (
-                <hr className="border-t-2 border-gray-200 my-6" />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-
-        <footer className="max-w-4xl mx-auto mt-8 text-center text-xs text-gray-500">
-          <p>
-            Plant observation tracker powered by React and Google Firestore.
-          </p>
-        </footer>
-      </div>
-    );
+  const checkAccess = (input) => {
+    return input.toLowerCase() === ACCESS_NAME.toLowerCase();
   };
+
+  const handleUnlock = () => {
+    if (checkAccess(accessInput)) {
+      setIsUnlocked(true);
+      setAccessInput("");
+    } else {
+      console.error("Incorrect access name. Please try again.");
+      setAccessInput("");
+    }
+  };
+
+  console.log("🔧 About to render JSX...");
+  console.log("Snippets:", snippets);
+  console.log("isUnlocked:", isUnlocked);
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 font-inter">
+      <header className="max-w-4xl mx-auto mb-6 text-center">
+        <h1 className="text-3xl font-extrabold text-gray-900 border-b-2 border-blue-500 pb-2">
+          Plant Observation Tracker
+        </h1>
+        <p className="text-gray-500 mt-2">
+          Track your plant growth and observations. Access Name: **
+          {ACCESS_NAME}
+          **
+        </p>
+        <p className="text-sm text-red-500 mt-1">
+          {db && isUnlocked ? (
+            <span>
+              Persistent connection, <strong>{ACCESS_NAME}</strong> — you can
+              save your notes now.
+            </span>
+          ) : (
+            <span>Persistence NOT Active (Missing Firebase Config).</span>
+          )}
+        </p>
+      </header>
+
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* --- GLOBAL UNLOCK BAR --- */}
+        {!isUnlocked && (
+          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
+            <label
+              htmlFor="access-name"
+              className="text-sm font-medium text-yellow-800 shrink-0"
+            >
+              Enter Access Name to Edit:
+            </label>
+            <input
+              id="access-name"
+              type="text"
+              className="w-full sm:w-64 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              value={accessInput}
+              onChange={(e) => setAccessInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") handleUnlock();
+              }}
+              placeholder="Enter Name..."
+            />
+            <button
+              onClick={handleUnlock}
+              className="w-full sm:w-auto px-4 py-2 bg-yellow-600 text-white font-semibold rounded-md shadow-sm hover:bg-yellow-700 transition duration-150 text-sm"
+            >
+              Unlock Editing
+            </button>
+          </div>
+        )}
+
+        {/* --- RENDER PLANT SNIPPETS --- */}
+        {snippets.map((data, index) => (
+          <React.Fragment key={data.id}>
+            <NoteSnippet
+              id={data.id}
+              title={data.title}
+              images={data.images}
+              defaultNote={data.defaultNote}
+              userId={userId}
+              db={db}
+              isEditable={isUnlocked && !!db}
+            />
+            {index < snippets.length - 1 && (
+              <hr className="border-t-2 border-gray-200 my-6" />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <footer className="max-w-4xl mx-auto mt-8 text-center text-xs text-gray-500">
+        <p>Plant observation tracker powered by React and Google Firestore.</p>
+      </footer>
+    </div>
+  );
 }
