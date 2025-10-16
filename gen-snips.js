@@ -1,7 +1,11 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const imagesDir = path.join(__dirname, "public", "images");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const imagesDir = path.join(__dirname, "images");
 
 // Get ALL folders (not just plant-*)
 const folders = fs

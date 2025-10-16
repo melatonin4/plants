@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "🚀 Generating snippets and deploying..."
 
+
 # Generate snippets-data.js
 echo "🔄 Generating snippets from image folders..."
 node gen-snips.js
