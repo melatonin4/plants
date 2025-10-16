@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const imagesDir = path.join(__dirname, "images");
+const imagesDir = path.join(__dirname, "public", "images"); // Updated path
 
 // Get ALL folders (not just plant-*)
 const folders = fs
