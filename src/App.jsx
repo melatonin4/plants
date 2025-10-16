@@ -316,7 +316,7 @@ export default function App() {
 
   // Simple image URL constructor using actual filenames
   const getImagePaths = (snippetId, imageFilenames) => {
-    return imageFilenames.map((filename) => `/images/${snippetId}/${filename}`);
+    return imageFilenames.map((filename) => `images/${snippetId}/${filename}`);
   };
 
   // Generate snippets with your actual plant images
