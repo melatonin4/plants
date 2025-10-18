@@ -164,6 +164,7 @@ const NoteSnippet = ({
   const [note, setNote] = useState(defaultNote);
   const [isSaving, setIsSaving] = useState(false);
   const [showModal, setShowModal] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef(null);
 
   const getThumbWidthClass = () => {
@@ -211,6 +212,7 @@ const NoteSnippet = ({
         updatedAt: new Date().toISOString(),
         userId: userId,
       });
+      setIsEditing(false);
     } catch (error) {
       console.error("Error saving document:", error);
       console.error("Error saving note. Check console for details.");
@@ -220,27 +222,41 @@ const NoteSnippet = ({
   };
 
   useEffect(() => {
-    if (textareaRef.current && isEditable) {
+    if (textareaRef.current && isEditing) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.focus();
     }
-  }, [note, isEditable]);
+  }, [isEditing, note]);
 
-  const handleContentEditableInput = (e) => {
-    const content = e.currentTarget.innerHTML;
+  // Function to format note for display (view mode) with clickable links
+  const formatNoteWithLinks = (text) => {
+    if (!text) return text;
 
-    // Extract text content from HTML, preserving URLs but removing link tags
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = content;
-
-    // Replace link elements with their URL text
-    const links = tempDiv.querySelectorAll("a[data-original-url]");
-    links.forEach((link) => {
-      const url = link.getAttribute("data-original-url");
-      link.replaceWith(url);
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.split("\n").map((line, index) => {
+      const parts = line.split(urlPattern);
+      return (
+        <div key={index} className="mb-1">
+          {parts.map((part, partIndex) =>
+            urlPattern.test(part) ? (
+              <a
+                key={partIndex}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline break-all"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {part}
+              </a>
+            ) : (
+              part
+            )
+          )}
+        </div>
+      );
     });
-
-    setNote(tempDiv.textContent || tempDiv.innerText || "");
   };
 
   const ImageModal = () => (
@@ -304,85 +320,94 @@ const NoteSnippet = ({
       </div>
 
       <div className="flex w-full space-x-2 items-start">
-        {isEditable ? (
-          // Editable mode with clickable links
-          <div
+        {isEditing ? (
+          // Editing mode - use textarea (normal typing)
+          <textarea
             ref={textareaRef}
-            className={`flex-grow p-2 text-sm rounded-lg border shadow-sm transition duration-150 min-h-[80px] w-full ${
-              isEditable
-                ? "bg-white border-blue-300 focus:ring-blue-500 focus:border-blue-500 cursor-text"
-                : "bg-gray-50 border-gray-200 cursor-not-allowed"
-            }`}
-            contentEditable={isEditable && !isSaving}
-            suppressContentEditableWarning={true}
-            onInput={handleContentEditableInput}
-            onBlur={() => {
-              // Convert any plain text URLs to clickable links when focus is lost
-              if (textareaRef.current) {
-                const currentContent = textareaRef.current.innerHTML;
-                const formattedContent = formatNoteForEditing(note);
-                if (currentContent !== formattedContent) {
-                  textareaRef.current.innerHTML = formattedContent;
-                }
-              }
-            }}
-            dangerouslySetInnerHTML={{ __html: formatNoteForEditing(note) }}
+            className="flex-grow resize-none p-2 text-sm rounded-lg border border-blue-300 bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-150"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Enter your observations and notes... URLs will become clickable when saved."
+            rows={3}
+            disabled={isSaving}
           />
         ) : (
-          // View-only mode
+          // View mode - show formatted text with clickable links
           <div
-            className={`flex-grow p-2 text-sm rounded-lg border min-h-[80px] w-full ${
+            className={`flex-grow p-2 text-sm rounded-lg border min-h-[80px] w-full cursor-pointer ${
               isEditable
-                ? "bg-gray-50 border-gray-200 cursor-pointer hover:bg-gray-100"
+                ? "bg-gray-50 border-gray-200 hover:bg-gray-100"
                 : "bg-gray-50 border-gray-200"
             }`}
+            onClick={() => isEditable && setIsEditing(true)}
           >
             {note ? (
-              formatNoteForDisplay(note)
+              formatNoteWithLinks(note)
             ) : (
-              <span className="text-gray-400">No notes yet...</span>
+              <span className="text-gray-400">
+                {isEditable ? "Click to add notes..." : "No notes yet..."}
+              </span>
             )}
           </div>
         )}
 
-        <button
-          onClick={handleSave}
-          disabled={!isEditable || isSaving}
-          className={`w-14 h-14 flex flex-col justify-center items-center rounded-lg text-white font-semibold shadow-md transition duration-200 leading-tight text-center text-[0.7rem] ${
-            isEditable && !isSaving
-              ? "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          {isSaving ? (
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+        <div className="flex flex-col space-y-2">
+          {isEditing && (
+            <button
+              onClick={() => {
+                setIsEditing(false);
+                setNote(note); // Reset any unsaved changes
+              }}
+              className="w-14 h-7 flex justify-center items-center rounded text-white bg-gray-500 hover:bg-gray-600 text-xs font-semibold"
             >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          ) : (
-            <>
-              Save
-              <br />
-              Note
-            </>
+              Cancel
+            </button>
           )}
-        </button>
+          <button
+            onClick={isEditing ? handleSave : () => setIsEditing(true)}
+            disabled={(!isEditable || isSaving) && !isEditing}
+            className={`w-14 h-14 flex flex-col justify-center items-center rounded-lg text-white font-semibold shadow-md transition duration-200 leading-tight text-center text-[0.7rem] ${
+              (isEditable && !isSaving) || isEditing
+                ? "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+          >
+            {isSaving ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : isEditing ? (
+              <>
+                Save
+                <br />
+                Note
+              </>
+            ) : (
+              <>
+                Edit
+                <br />
+                Note
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
