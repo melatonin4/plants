@@ -1,3 +1,4 @@
 # Script files (don't track these)
-# gen-snips.js
-# dep-snips.sh
+gen-snips.js
+dep-snips.sh
+folder-diagram.txt

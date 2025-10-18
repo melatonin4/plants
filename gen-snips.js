@@ -5,25 +5,24 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const imagesDir = path.join(__dirname, "public", "images"); // Updated path
+const imagesDir = path.join(__dirname, "public", "images");
 
-// Get ALL folders (not just plant-*)
+// Get ALL folders
 const folders = fs
   .readdirSync(imagesDir)
   .filter((folder) => {
     const folderPath = path.join(imagesDir, folder);
-    return fs.statSync(folderPath).isDirectory(); // Any directory
+    return fs.statSync(folderPath).isDirectory();
   })
   .map((folder) => {
     const folderPath = path.join(imagesDir, folder);
     const stats = fs.statSync(folderPath);
     return {
       name: folder,
-      birthtime: stats.birthtime, // Creation time (macOS)
-      ctime: stats.ctime, // Change time (fallback)
+      birthtime: stats.birthtime,
+      ctime: stats.ctime,
     };
   })
-  // Sort by creation time (oldest first)
   .sort((a, b) => a.birthtime - b.birthtime || a.ctime - b.ctime);
 
 const snippets = [];
@@ -39,13 +38,18 @@ folders.forEach((folder, index) => {
     .sort();
 
   if (files.length > 0) {
-    // Convert folder name to display name (capitalize first letter)
-    const displayName =
-      folder.name.charAt(0).toUpperCase() + folder.name.slice(1);
+    // Extract base name by removing numbering suffixes like -01, -02, etc.
+    const baseName = folder.name.replace(/-\d+$/, "");
+
+    // Convert to display name (capitalize first letter of each word)
+    const displayName = baseName
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
 
     snippets.push({
       id: folder.name,
-      title: `${index + 1}. ${displayName}: in CV plaza`,
+      title: `${index + 1}. ${displayName}`,
       imageFilenames: files,
       defaultNote: "",
     });
