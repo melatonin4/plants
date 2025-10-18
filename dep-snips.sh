@@ -50,11 +50,11 @@ else
     done
     
     # Commit changes
-    echo -e "\n${GREEN_ICON} Committing changes...${NC}"
+    echo -e "\n Committing changes...${NC}"
     git commit -m "Update: $(date +'%Y-%m-%d %H:%M') - Auto-generated snippets"
     
     # Pull remote changes first to avoid rejection
-    echo -e "${BLUE_ICON} Pulling remote changes...${NC}"
+    echo -e " Pulling remote changes...${NC}"
     git pull origin main --rebase
     
     # Push to GitHub
@@ -62,5 +62,5 @@ else
     git push origin main
 fi
 
-echo -e "\n${GREEN_ICON} ✅ Done! Vercel will auto-deploy.${NC}"
+echo -e "\n ✅ Done! Vercel will auto-deploy.${NC}"
 echo -e "${GREEN} Check: https://plants-melatonin4.vercel.app${NC}"
