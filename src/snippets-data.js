@@ -1,6 +1,6 @@
 // snippets-data.js
 // Auto-generated from image folders (sorted by creation date)
-// Last updated: 2025-10-18T07:52:17.399Z
+// Last updated: 2025-10-18T08:21:54.714Z
 
 export const SNIPPET_DATA = [
   {
@@ -152,6 +152,30 @@ export const SNIPPET_DATA = [
     "title": "17. Grass And Tiny White Daisy Neighbor",
     "imageFilenames": [
       "20250319_155408.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Sunrose-Helianthemum-Neighbor ",
+    "title": "18. Sunrose Helianthemum Neighbor ",
+    "imageFilenames": [
+      "20250509_152114.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Unknow-Needle-pink-flower-Ground",
+    "title": "19. Unknow Needle Pink Flower Ground",
+    "imageFilenames": [
+      "VideoCapture_20211223-114917.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Strong-Survivor-Pot-Red-and-Pink",
+    "title": "20. Strong Survivor Pot Red And Pink",
+    "imageFilenames": [
+      "20220921_112040.jpg"
     ],
     "defaultNote": ""
   }
