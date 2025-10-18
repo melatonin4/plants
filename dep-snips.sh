@@ -23,7 +23,7 @@ node gen-snips.js
 echo -e "${BLUE_ICON} 📤 Deploying to GitHub...${NC}"
 
 # Check git status and show changed files
-echo -e "${YELLOW}📁 Changed files:${NC}"
+echo -e "📁 Changed files:${NC}"
 git status --porcelain | while read status file; do
   case "$status" in
     " M") echo -e "${YELLOW_ICON} Modified:   ${YELLOW}$file${NC}" ;;
