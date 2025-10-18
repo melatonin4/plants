@@ -1,6 +1,6 @@
 // snippets-data.js
 // Auto-generated from image folders (sorted by creation date)
-// Last updated: 2025-10-18T08:56:10.929Z
+// Last updated: 2025-10-18T17:09:34.184Z
 
 export const SNIPPET_DATA = [
   {
@@ -176,6 +176,49 @@ export const SNIPPET_DATA = [
     "title": "20. Strong Survivor Pot Red And Pink",
     "imageFilenames": [
       "20220921_112040.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "GPT-Ceanothus-prostratus-Squaw-Carpet",
+    "title": "21. GPT Ceanothus Prostratus Squaw Carpet",
+    "imageFilenames": [
+      "2823a.jpg",
+      "2823b.jpg",
+      "2823c.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "GPT-Arctostaphylos-uva-ursi",
+    "title": "22. GPT Arctostaphylos Uva Ursi",
+    "imageFilenames": [
+      "Screen Shot 2025-10-18 at 9.25.34 AM.png"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "GPT-California-Fuchsia-Epilobium-canum",
+    "title": "23. GPT California Fuchsia Epilobium Canum",
+    "imageFilenames": [
+      "Screen Shot 2025-10-18 at 9.41.35 AM.png",
+      "Screen Shot 2025-10-18 at 9.45.21 AM.png"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "GPT-Fragaria-chiloensis-Beach-Strawberry",
+    "title": "24. GPT Fragaria Chiloensis Beach Strawberry",
+    "imageFilenames": [
+      "Screen Shot 2025-10-18 at 9.57.22 AM.png"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "GPT-Lavandula-dwarf-lavenders",
+    "title": "25. GPT Lavandula Dwarf Lavenders",
+    "imageFilenames": [
+      "Screen Shot 2025-10-18 at 10.08.18 AM.png"
     ],
     "defaultNote": ""
   }
