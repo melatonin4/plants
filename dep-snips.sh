@@ -1,5 +1,36 @@
 #!/bin/bash
 
+# ... your existing color definitions ...
+
+echo -e "${BLUE} Generating snippets and deploying...${NC}"
+
+# Simple image check without compression
+check_image_sizes() {
+    local max_size_mb=5
+    local large_files=0
+    
+    echo -e "${BLUE_ICON} 🔍 Checking image sizes...${NC}"
+    
+    find public/images -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read -r file; do
+        size_mb=$(du -m "$file" 2>/dev/null | cut -f1)
+        
+        if [ -n "$size_mb" ] && [ "$size_mb" -gt "$max_size_mb" ]; then
+            echo -e "${RED_ICON} WARNING: Large image: ${RED}$file (${size_mb}MB)${NC}"
+            large_files=$((large_files + 1))
+        fi
+    done
+    
+    if [ "$large_files" -gt 0 ]; then
+        echo -e "${RED_ICON} ⚠️  Found $large_files images >5MB - consider compressing manually${NC}"
+        echo -e "${YELLOW} Quick compress: open Preview → Tools → Adjust Size → Set to 2000px width${NC}"
+    else
+        echo -e "${GREEN_ICON} ✅ All images are reasonably sized${NC}"
+    fi
+}
+
+check_image_sizes
+
+
 # Colors for output
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
