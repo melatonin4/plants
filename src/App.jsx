@@ -339,7 +339,7 @@ const NoteSnippet = ({
             className="flex-grow resize-none p-2 text-sm rounded-lg border border-blue-300 bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-150"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Enter your observations and notes... URLs will become clickable when saved."
+            // placeholder="Enter your observations and notes... URLs will become clickable when saved."
             rows={3}
             disabled={isSaving}
           />
