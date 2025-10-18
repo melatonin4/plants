@@ -3,3 +3,4 @@ gen-snips.js
 dep-snips.sh
 folder-diagram.txt
 cleanpull.sh
+dep-comp.sh
