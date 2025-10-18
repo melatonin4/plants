@@ -104,6 +104,53 @@ const useFirebase = () => {
   return { db, auth, userId, isInitialized: !!db };
 };
 
+// Function to format note for editing (convert URLs to clickable links)
+const formatNoteForEditing = (text) => {
+  if (!text) return "";
+
+  // Convert URLs to clickable links while editing
+  const urlPattern = /(https?:\/\/[^\s<]+)/g;
+  return text.replace(
+    urlPattern,
+    (url) =>
+      `<a href="${url}" target="_blank" rel="noopener noreferrer" 
+       data-original-url="${url}" 
+       class="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+       onclick="event.preventDefault(); window.open('${url}', '_blank');">
+      ${url}
+    </a>`
+  );
+};
+
+// Function to format note for display (view mode)
+const formatNoteForDisplay = (text) => {
+  if (!text) return text;
+
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  return text.split("\n").map((line, index) => {
+    const parts = line.split(urlPattern);
+    return (
+      <div key={index}>
+        {parts.map((part, partIndex) =>
+          urlPattern.test(part) ? (
+            <a
+              key={partIndex}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline break-all"
+            >
+              {part}
+            </a>
+          ) : (
+            part
+          )
+        )}
+      </div>
+    );
+  });
+};
+
 // --- NOTE SNIPPET COMPONENT ---
 const NoteSnippet = ({
   id,
@@ -173,11 +220,28 @@ const NoteSnippet = ({
   };
 
   useEffect(() => {
-    if (textareaRef.current) {
+    if (textareaRef.current && isEditable) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [note]);
+  }, [note, isEditable]);
+
+  const handleContentEditableInput = (e) => {
+    const content = e.currentTarget.innerHTML;
+
+    // Extract text content from HTML, preserving URLs but removing link tags
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = content;
+
+    // Replace link elements with their URL text
+    const links = tempDiv.querySelectorAll("a[data-original-url]");
+    links.forEach((link) => {
+      const url = link.getAttribute("data-original-url");
+      link.replaceWith(url);
+    });
+
+    setNote(tempDiv.textContent || tempDiv.innerText || "");
+  };
 
   const ImageModal = () => (
     <div
@@ -240,23 +304,46 @@ const NoteSnippet = ({
       </div>
 
       <div className="flex w-full space-x-2 items-start">
-        <textarea
-          ref={textareaRef}
-          className={`flex-grow resize-none p-2 text-sm rounded-lg border shadow-sm transition duration-150 ${
-            isEditable
-              ? "bg-white border-blue-300 focus:ring-blue-500 focus:border-blue-500"
-              : "bg-gray-50 border-gray-200 cursor-not-allowed"
-          }`}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder={
-            isEditable
-              ? "Enter your observations and notes..."
-              : "Enter Access Name to Edit..."
-          }
-          rows={3}
-          disabled={!isEditable || isSaving}
-        />
+        {isEditable ? (
+          // Editable mode with clickable links
+          <div
+            ref={textareaRef}
+            className={`flex-grow p-2 text-sm rounded-lg border shadow-sm transition duration-150 min-h-[80px] w-full ${
+              isEditable
+                ? "bg-white border-blue-300 focus:ring-blue-500 focus:border-blue-500 cursor-text"
+                : "bg-gray-50 border-gray-200 cursor-not-allowed"
+            }`}
+            contentEditable={isEditable && !isSaving}
+            suppressContentEditableWarning={true}
+            onInput={handleContentEditableInput}
+            onBlur={() => {
+              // Convert any plain text URLs to clickable links when focus is lost
+              if (textareaRef.current) {
+                const currentContent = textareaRef.current.innerHTML;
+                const formattedContent = formatNoteForEditing(note);
+                if (currentContent !== formattedContent) {
+                  textareaRef.current.innerHTML = formattedContent;
+                }
+              }
+            }}
+            dangerouslySetInnerHTML={{ __html: formatNoteForEditing(note) }}
+          />
+        ) : (
+          // View-only mode
+          <div
+            className={`flex-grow p-2 text-sm rounded-lg border min-h-[80px] w-full ${
+              isEditable
+                ? "bg-gray-50 border-gray-200 cursor-pointer hover:bg-gray-100"
+                : "bg-gray-50 border-gray-200"
+            }`}
+          >
+            {note ? (
+              formatNoteForDisplay(note)
+            ) : (
+              <span className="text-gray-400">No notes yet...</span>
+            )}
+          </div>
+        )}
 
         <button
           onClick={handleSave}
