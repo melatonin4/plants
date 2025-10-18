@@ -165,6 +165,7 @@ const NoteSnippet = ({
   const [isSaving, setIsSaving] = useState(false);
   const [showModal, setShowModal] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [originalNote, setOriginalNote] = useState(defaultNote);
   const textareaRef = useRef(null);
 
   const getThumbWidthClass = () => {
@@ -189,9 +190,12 @@ const NoteSnippet = ({
         (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            setNote(data.content || defaultNote);
+            const newNote = data.content || defaultNote;
+            setNote(newNote);
+            setOriginalNote(newNote);
           } else {
             setNote(defaultNote);
+            setOriginalNote(defaultNote);
           }
         },
         (error) => {
@@ -229,7 +233,16 @@ const NoteSnippet = ({
     }
   }, [isEditing, note]);
 
-  // Function to format note for display (view mode) with clickable links
+  const handleStartEdit = () => {
+    setOriginalNote(note);
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setNote(originalNote);
+    setIsEditing(false);
+  };
+
   const formatNoteWithLinks = (text) => {
     if (!text) return text;
 
@@ -321,25 +334,23 @@ const NoteSnippet = ({
 
       <div className="flex w-full space-x-2 items-start">
         {isEditing ? (
-          // Editing mode - use textarea (normal typing)
           <textarea
             ref={textareaRef}
             className="flex-grow resize-none p-2 text-sm rounded-lg border border-blue-300 bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-150"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            // placeholder="Enter your observations and notes... URLs will become clickable when saved."
+            placeholder="Enter your observations and notes... URLs will become clickable when saved."
             rows={3}
             disabled={isSaving}
           />
         ) : (
-          // View mode - show formatted text with clickable links
           <div
             className={`flex-grow p-2 text-sm rounded-lg border min-h-[80px] w-full cursor-pointer ${
               isEditable
                 ? "bg-gray-50 border-gray-200 hover:bg-gray-100"
                 : "bg-gray-50 border-gray-200"
             }`}
-            onClick={() => isEditable && setIsEditing(true)}
+            onClick={() => isEditable && handleStartEdit()}
           >
             {note ? (
               formatNoteWithLinks(note)
@@ -354,17 +365,14 @@ const NoteSnippet = ({
         <div className="flex flex-col space-y-2">
           {isEditing && (
             <button
-              onClick={() => {
-                setIsEditing(false);
-                setNote(note); // Reset any unsaved changes
-              }}
+              onClick={handleCancel}
               className="w-14 h-7 flex justify-center items-center rounded text-white bg-gray-500 hover:bg-gray-600 text-xs font-semibold"
             >
               Cancel
             </button>
           )}
           <button
-            onClick={isEditing ? handleSave : () => setIsEditing(true)}
+            onClick={isEditing ? handleSave : handleStartEdit}
             disabled={(!isEditable || isSaving) && !isEditing}
             className={`w-14 h-14 flex flex-col justify-center items-center rounded-lg text-white font-semibold shadow-md transition duration-200 leading-tight text-center text-[0.7rem] ${
               (isEditable && !isSaving) || isEditing
