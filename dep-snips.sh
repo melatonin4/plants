@@ -16,11 +16,11 @@ RED_ICON='🔴'
 echo -e "${BLUE} Generating snippets and deploying...${NC}"
 
 # Generate snippets first
-echo -e "${BLUE_ICON} Generating snippets from image folders...${NC}"
+echo -e " Generating snippets from image folders...${NC}"
 node gen-snips.js
 
 # Git operations
-echo -e "${BLUE_ICON} Deploying to GitHub...${NC}"
+echo -e " Deploying to GitHub...${NC}"
 
 # Check git status and show changed files
 echo -e " Changed files:${NC}"
@@ -36,7 +36,7 @@ git status --porcelain | while read status file; do
 done
 
 # Add all changes
-echo -e "\n${BLUE_ICON} Staging changes...${NC}"
+echo -e "\n Staging changes...${NC}"
 git add .
 
 # Check if there are changes to commit
@@ -44,7 +44,7 @@ if git diff-index --quiet HEAD --; then
     echo -e "${YELLOW_ICON} No changes to commit.${NC}"
 else
     # Show what will be committed
-    echo -e "\n${GREEN} Files to be committed:${NC}"
+    echo -e "\n Files to be committed:${NC}"
     git diff --cached --name-only | while read file; do
         echo -e "${YELLOW_ICON} ${YELLOW}$file${NC}"
     done
