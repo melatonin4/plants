@@ -474,7 +474,7 @@ export default function App() {
           Plant Observation Tracker
         </h1>
         <p className="text-gray-500 mt-2">
-          To track your ocomments enter your Name:
+          To track your comments enter your Name:
         </p>
         <p className="text-sm text-red-500 mt-1">
           {db && isUnlocked ? (
