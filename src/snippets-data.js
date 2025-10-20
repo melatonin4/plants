@@ -1,6 +1,6 @@
 // snippets-data.js
 // Auto-generated from image folders (sorted by creation date)
-// Last updated: 2025-10-18T17:09:34.184Z
+// Last updated: 2025-10-20T15:26:20.425Z
 
 export const SNIPPET_DATA = [
   {
@@ -219,6 +219,15 @@ export const SNIPPET_DATA = [
     "title": "25. GPT Lavandula Dwarf Lavenders",
     "imageFilenames": [
       "Screen Shot 2025-10-18 at 10.08.18 AM.png"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Sphaeralcea-Newleaze-Coral",
+    "title": "26. Sphaeralcea Newleaze Coral",
+    "imageFilenames": [
+      "7351943cf0fd2a20012df5d8cfda3b18.jpg",
+      "Sphaeralcea-Newleaze-Coral-1024x768.jpg"
     ],
     "defaultNote": ""
   }
