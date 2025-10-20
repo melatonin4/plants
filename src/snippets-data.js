@@ -1,6 +1,6 @@
 // snippets-data.js
 // Auto-generated from image folders (sorted by creation date)
-// Last updated: 2025-10-20T15:51:26.033Z
+// Last updated: 2025-10-20T16:01:17.210Z
 
 export const SNIPPET_DATA = [
   {
@@ -278,8 +278,8 @@ export const SNIPPET_DATA = [
     "defaultNote": ""
   },
   {
-    "id": "Purple-Flower_shrub-Neighbor",
-    "title": "32. Purple Flower_shrub Neighbor",
+    "id": "Purple-Flower-Shrub-Neighbor",
+    "title": "32. Purple Flower Shrub Neighbor",
     "imageFilenames": [
       "20251019_124401.jpg",
       "20251019_124415.jpg"
