@@ -483,7 +483,7 @@ export default function App() {
               save your notes now.
             </span>
           ) : (
-            <span>Persistence NOT Active (Missing Firebase Config).</span>
+            <span>Persistence NOT Active</span>
           )}
         </p>
       </header>
