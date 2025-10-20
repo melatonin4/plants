@@ -1,6 +1,6 @@
 // snippets-data.js
 // Auto-generated from image folders (sorted by creation date)
-// Last updated: 2025-10-20T15:26:20.425Z
+// Last updated: 2025-10-20T15:51:26.033Z
 
 export const SNIPPET_DATA = [
   {
@@ -167,6 +167,8 @@ export const SNIPPET_DATA = [
     "id": "Needle-pink-flower-Ground",
     "title": "19. Needle Pink Flower Ground",
     "imageFilenames": [
+      "20251019_123415.jpg",
+      "VideoCapture_20211223-114825.jpg",
       "VideoCapture_20211223-114917.jpg"
     ],
     "defaultNote": ""
@@ -228,6 +230,68 @@ export const SNIPPET_DATA = [
     "imageFilenames": [
       "7351943cf0fd2a20012df5d8cfda3b18.jpg",
       "Sphaeralcea-Newleaze-Coral-1024x768.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Fleshy-Leaves-Pink-Flower-Neighbor",
+    "title": "27. Fleshy Leaves Pink Flower Neighbor",
+    "imageFilenames": [
+      "20251019_123741.jpg",
+      "20251019_123746.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Mexican-Sage-Neighbor",
+    "title": "28. Mexican Sage Neighbor",
+    "imageFilenames": [
+      "20251019_124743.jpg",
+      "20251019_124753.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Green-Pink-Flower-Ground-Neighbor",
+    "title": "29. Green Pink Flower Ground Neighbor",
+    "imageFilenames": [
+      "20251019_123641.jpg",
+      "20251019_123647.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Green-White-Flower-Ground-Neighbor",
+    "title": "30. Green White Flower Ground Neighbor",
+    "imageFilenames": [
+      "20251019_125100.jpg",
+      "20251019_125105.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Lavandar-of-Some-Kind",
+    "title": "31. Lavandar Of Some Kind",
+    "imageFilenames": [
+      "20251019_123628.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Purple-Flower_shrub-Neighbor",
+    "title": "32. Purple Flower_shrub Neighbor",
+    "imageFilenames": [
+      "20251019_124401.jpg",
+      "20251019_124415.jpg"
+    ],
+    "defaultNote": ""
+  },
+  {
+    "id": "Multi-Color-Salvia-Neighbor",
+    "title": "33. Multi Color Salvia Neighbor",
+    "imageFilenames": [
+      "20251019_123612.jpg",
+      "20251019_123616.jpg"
     ],
     "defaultNote": ""
   }
